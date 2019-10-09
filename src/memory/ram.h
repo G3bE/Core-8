@@ -9,7 +9,7 @@ class RAM {
     void * at;
     int size; // in bytes
 public:
-    RAM(int size);
+    explicit RAM(int size);
     void * get(int addr);
     int resolve(void * addr);
 };

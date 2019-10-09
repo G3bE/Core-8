@@ -5,7 +5,6 @@
 #include "instructions.h"
 
 #include <vector>
-#include <stdio.h>
 
 std::vector<std::string> split(std::string string)
 {
