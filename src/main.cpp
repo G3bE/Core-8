@@ -49,6 +49,8 @@ int main(int argc, char * argv[])
             }
             continue;
         }
+        // This is a fragment of my attempt to load byte code from a separate file
+        // It checks if the header of the file has the same version as the current interpreter
         /*
         auto h = (header *) read_file(arg).c_str();
         if (h->version_mayor != VERSION_MAYOR or h->version_minor != VERSION_MINOR)

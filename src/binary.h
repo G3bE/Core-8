@@ -5,7 +5,10 @@
 #ifndef CHIP_8_BINARY_H
 #define CHIP_8_BINARY_H
 
-#include <stdint.h>
+#include <cstdint>
+
+// This is a fragment of my attempt to load byte code from a separate file
+// It defines the header for the separate file which stores where the code starts and where certain libraries should be loaded
 
 typedef struct
 {
