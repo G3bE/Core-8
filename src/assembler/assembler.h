@@ -7,6 +7,6 @@
 
 #include <vector>
 
-std::vector<uint16_t> proccess_file(std::string path);
+std::vector<uint16_t> process_file(std::string path);
 
 #endif //CORE_8_ASSEMBLER_H

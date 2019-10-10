@@ -42,6 +42,8 @@ protected:
     // while mov [V3], 3 would set 0xA832 to 3. Also mov V2, V3 would set V2 to 0xA832,
     // while mov V2, [V3] would take the value at 0xA832 (in this case 3) and put it into V2
 
+    void pass();                    //  ; simply blank line                                        : 0000
+
     void cls();                     // cls                                                         : 00E0
     void ret();                     // ret                                                         : 00EE
 

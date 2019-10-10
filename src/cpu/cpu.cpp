@@ -46,6 +46,9 @@ bool CPU::instruct(uint16_t * instruction)
     {
         switch (*instruction)
         {
+        case 0x0:
+            this->pass();
+            break;
         case 0xE0:
             this->cls();
             break;
@@ -233,6 +236,11 @@ int CPU::run()
 
 // instructions
 
+void CPU::pass()
+{
+
+};
+
 void CPU::cls()
 {
     // clear via termbox or smth
@@ -244,45 +252,47 @@ void CPU::ret()
     this->stack_pointer--;
 }
 
+// all the minus 1 because we always increment the PC
+
 void CPU::jp(addr a)
 {
-    this->current_instruction = a._;
+    this->current_instruction = a._ - 1;
 }
 
 void CPU::jp(nibble x)
 {
-    this->current_instruction = this->registers[x._];
+    this->current_instruction = this->registers[x._] - 1;
 }
 
 void CPU::call(addr a)
 {
     this->stack_pointer++;
     this->stack[this->stack_pointer] = this->current_instruction;
-    this->current_instruction = a._;
+    this->current_instruction = a._ -1;
 }
 
 void CPU::se(nibble x, byte a)
 {
     if (this->registers[x._] == a)
-        this->current_instruction += 2;
+        this->current_instruction += 1;
 }
 
 void CPU::se(nibble x, nibble y)
 {
     if (this->registers[x._] == this->registers[y._])
-        this->current_instruction += 2;
+        this->current_instruction += 1;
 }
 
 void CPU::sne(nibble x, byte a)
 {
     if (this->registers[x._] != a)
-        this->current_instruction += 2;
+        this->current_instruction += 1;
 }
 
 void CPU::sne(nibble x, nibble y)
 {
     if (this->registers[x._] != this->registers[y._])
-        this->current_instruction += 2;
+        this->current_instruction += 1;
 }
 
 void CPU::mov(nibble x, byte a)

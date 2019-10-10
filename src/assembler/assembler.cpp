@@ -15,7 +15,7 @@ constexpr unsigned int hash(const char * s, int off = 0) {
     return !s[off] ? 5381 : hash(s, off+1)*33 ^ s[off];
 }
 
-std::vector<uint16_t> proccess_file(std::string path)
+std::vector<uint16_t> process_file(std::string path)
 {
     std::string line;
     std::vector<uint16_t> res;
@@ -30,6 +30,9 @@ std::vector<uint16_t> proccess_file(std::string path)
 
             switch (hash(tokens[0].c_str()))
             {
+            case hash(""):
+                instruction = 0x0000;
+                break;
             case hash("cls"):
                 instruction = 0x00E0;
                 break;

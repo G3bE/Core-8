@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
             return 1;
         }
          */
-        std::vector<uint16_t> instructions = proccess_file(arg);
+        std::vector<uint16_t> instructions = process_file(arg);
         uint16_t * code_start = instructions.data();
         CPU * cpu = new CPU(code_start, code_start + instructions.size()*2);
         cpu->run();

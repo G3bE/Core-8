@@ -15,7 +15,8 @@ std::vector<std::string> split(std::string string)
     {
         if (*i == ' ' || *i == ',')
         {
-            results.push_back(buf);
+            if (!buf.empty())
+                results.push_back(buf);
             buf = "";
         } else {
             buf.push_back(*i);
@@ -23,6 +24,48 @@ std::vector<std::string> split(std::string string)
     }
     results.push_back(buf);
     return results;
+}
+
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
+
+char read_byte(std::string token)
+{
+    if (is_number(token))
+        return std::stoi(token);
+    if (token[0] == '\\')
+    {
+        switch (token[1])
+        {
+        case 'b':
+            return '\b';
+        case 'e':
+            return '\e';
+        case 'f':
+            return '\f';
+        case 'n':
+            return '\n';
+        case 'r':
+            return '\r';
+        case 't':
+            return '\t';
+        case 'v':
+            return '\v';
+        case '\\':
+            return '\\';
+        case '\'':
+            return '\'';
+        case '"':
+            return '"';
+        case '?':
+            return '\?';
+        }
+    }
+    return token[0];
 }
 
 uint16_t jp(std::string line)
@@ -268,10 +311,10 @@ uint16_t put(std::string line)
     {
         std::string reg = {what[1]};
         instruction = 0x100A;
-        instruction += std::stoi(reg, 0, 16) * 0x100;
+        instruction += (char)std::stoi(reg, 0, 16) * 0x100;
     } else {
         instruction = 0x4009;
-        instruction += std::stoi(what) * 0x10;
+        instruction += read_byte(what) * 0x10;
     }
     return instruction;
 }
