@@ -3,6 +3,41 @@ Core-8 is a [Chip-8](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM) like inte
 ~~It features a compiler and linker which create files that can be executed by the interpreter.~~
 At the moment it can just read the contents of a file with assembly like syntax described below.
 
+## Building
+Building Core-8 is really easy because of two factors: Core-8 only uses the C/C++ standard library and it is built using Cmake
+### Getting cmake
+Generally you can download Cmake at [its website](https://cmake.org/download/).
+Most package manager should have a cmake package making it even easier to install:
+```
+(sudo) <your_package_manager> install cmake
+```
+### Getting Git
+Git an optional tool for downloading Core-8. Just like Cmake you can download it at [its website](https://git-scm.com/)
+or via any package manager:
+```
+(sudo) <your_package_manager> install git
+```
+### Getting the sources
+Via Git:
+```
+git clone https://github.com/G3bE/Core-8.git
+```
+Or by download the [ZIP](https://github.com/G3bE/Core-8/archive/master.zip)
+### Building the sources
+```
+cd Core-8
+mkdir build && cd build
+cmake ../
+make
+```
+### Testing your build
+```
+(cd Core-8)
+mov test/test.ce build/
+cd build/
+./Core-8 test.ce
+```
+
 ## Syntax
 The Core-8 interpreter executes from above to bottom meaning there is no main function (atm).
 Every line can hold one instruction.

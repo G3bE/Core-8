@@ -1,5 +1,11 @@
+jp START
+REPEAT:
+mov V1, 1
+START:
 put H
 put e
 put y
 put !
 put \n
+se V1, 1
+jp REPEAT
