@@ -6,7 +6,7 @@ At the moment it can just read the contents of a file with assembly like syntax 
 ## Syntax
 The Core-8 interpreter executes from above to bottom meaning there is no main function (atm).
 Every line can hold one instruction.
-> From here (x) means optional.
+> From here `(x)` means `x` is optional.
 
 An instruction is structured like this.
 ```
@@ -19,6 +19,9 @@ When referencing a register, [REG] is treated like an address; e.g. when registe
 while `mov V2, [V3]` would take the value at 0xA832 (in this case 3) and put it into V2.
 > The last part is yet WIP
 
+Labels are case-sensitive, can start contain and end with any character except white spaces and commas.
+Labels can only replace addresses, but not registers or bytes.
+
 I listed all instructions with their valid arguments below. Instructions with multiple possible arguments are listed repeatedly.
 The list is incomplete atm. For a more complete, less good looking list view `src/cpu/cpu.h`
 
@@ -27,20 +30,20 @@ The list is incomplete atm. For a more complete, less good looking list view `sr
 |cls          |None             |Clears the screen                   |
 |ret          |None             |Returns from a subroutine           |
 |jp           |address `a`      |Sets the PC<sup>1</sup> to `a`      |
-|jp           |register `x`     |Sets the PC to the address in V`x`  |
+|jp           |register `x`     |Sets the PC to the address in `Vx`  |
 |call         |addr `a`         |Calls a subroutine                  |
-|se           |byte `b`, reg `x`|Skips next instruction if `b`==V`x` |
-|se           |reg `x`, reg `y` |Skips next instruction if V`x`==V`y`|
-|sne          |byte `b`, reg `x`|Skips next instruction if `b`!=V`x` |
-|sne          |reg `x`, reg `y` |Skips next instruction if V`x`!=V`y`|
-|mov          |reg `x`, byte `b`|Sets V`x` to `b`                    |
-|mov          |reg `x`, reg `y` |Sets V`x` to the value in V`y`      |
-|mov          |reg I, reg `x`   |Sets I to the value in V`x`         |
-|mov          |reg `x`, DT      |Sets V`x` to the value of DT        |
-|mov          |DT, rev `x`      |Sets DT to the value in V`x`        |
-|mov          |[I], reg `x`     |Stores V`x` at the address in I     |
-|mov          |reg `x`, [I]     |Loads V`x` from the address in I    |
-|mov          |reg `x`, K       |Stores the next key press in V`x`   |
+|se           |byte `b`, reg `x`|Skips next instruction if `b`==`Vx` |
+|se           |reg `x`, reg `y` |Skips next instruction if `Vx`==`Vy`|
+|sne          |byte `b`, reg `x`|Skips next instruction if `b`!=`Vx` |
+|sne          |reg `x`, reg `y` |Skips next instruction if `Vx`!=`Vy`|
+|mov          |reg `x`, byte `b`|Sets `Vx` to `b`                    |
+|mov          |reg `x`, reg `y` |Sets `Vx` to the value in `Vy`      |
+|mov          |reg I, reg `x`   |Sets I to the value in `Vx`         |
+|mov          |reg `x`, DT      |Sets `Vx` to the value of DT        |
+|mov          |DT, rev `x`      |Sets DT to the value in `Vx`        |
+|mov          |[I], reg `x`     |Stores `Vx` at the address in I     |
+|mov          |reg `x`, [I]     |Loads `Vx` from the address in I    |
+|mov          |reg `x`, K       |Stores the next key press in `Vx`   |
 
 <sup>1</sup> The program counter or PC is the pointer to the current executed instruction.
 

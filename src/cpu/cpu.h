@@ -28,7 +28,7 @@ class CPU {
 // for the tests
 protected:
     RAM ram;
-    int current_instruction; // pc
+    uint16_t current_instruction; // pc
     int last_instruction;
 
     int8_t registers[16];
@@ -52,15 +52,16 @@ protected:
 
     void call(addr a);              // call a                                                      : 2aaa
 
-    void se(nibble x, byte a);      // se Vx, a ; (Vx == a)                                        : 3xaa
+    void se(nibble x, byte b);      // se Vx, b ; (Vx == b)                                        : 3xbb
     void se(nibble x, nibble y);    // se Vx, Vy ; (Vx == Vy)                                      : 4xy0
 
-    void sne(nibble x, byte a);     // sne Vx, a ; (Vx != a)                                       : 5xaa
+    void sne(nibble x, byte b);     // sne Vx, b ; (Vx != b)                                       : 5xbb
     void sne(nibble x, nibble y);   // sne Vx, Vy ; (Vx != Vy)                                     : 4xy1
 
-    void mov(nibble x, byte a);     // mov Vx, a ; (Vx = a) | mov Vx, [y] ; (Vx = *y)              : 6xaa
+    void mov(nibble x, byte b);     // mov Vx, b ; (Vx = b) | mov Vx, [y] ; (Vx = *y)              : 6xbb
     void mov(nibble x, nibble y);   // mov Vx, Vy ; (Vx = Vy)                                      : 4xy2
     void mov(nibble x);             // mov I, Vx ; (I = Vx)                                        : 1x01
+    // void mov(addr a);               // mov I, a ; (I = a)                                          : 7aaa
     void mov_get_delay(nibble x);   // mov Vx, DT ; (Vx = DT)                                      : 1x02
     void mov_set_delay(nibble x);   // mov DT, Vx ; (DT = Vx)                                      : 1x03
 
@@ -69,15 +70,15 @@ protected:
 
     void get_key(nibble x);         // mov Vx, K ; waits for a key stroke and puts the key into Vx : 1x06
 
-    void add(nibble x, byte a);     // add Vx, a ; (Vx = Vx + a)                                   : 7xaa
+    void add(nibble x, byte b);     // add Vx, b ; (Vx = Vx + b)                                   : 7xbb
     void add(nibble x, nibble y);   // add Vx, Vy ; (Vx = Vx + Vy)                                 : 4xy3
     void add(nibble x);             // add I, Vx ; (I = I + Vx)                                    : 1x07
 
-    void sub(nibble x, byte a);     // sub Vx, a ; (x = Vx - a)                                    : 8xaa
+    void sub(nibble x, byte b);     // sub Vx, b ; (x = Vx - b)                                    : 8xbb
     void sub(nibble x, nibble y);   // sub Vx, Vy ; (Vx = Vx - Vy)                                 : 4xy4
     void sub(nibble x);             // sub I, Vx ; (I = I - Vx)                                    : 1x08
 
-    void subn(nibble x, byte a);    // subn Vx, a ; (x = a - Vx)                                   : 9xaa
+    void subn(nibble x, byte b);    // subn Vx, b ; (x = b - Vx)                                   : 9xbb
     void subn(nibble x, nibble y);  // subn Vx, y ; (x = y - Vx)                                   : 4xy5
     void subn(nibble x);            // subn I, Vx ; (I = Vx - I)                                   : 1x09
 
@@ -87,7 +88,7 @@ protected:
 
     void rnd(nibble x, byte seed);  // rnd Vx, s ; (Vx = random_byte & s)                          : Axss
 
-    void put(byte a);               // put a ; writes a single char to stdout                      : 4aa9
+    void put(byte b);               // put b ; writes a single char to stdout                      : 4aa9
     void put(nibble x);             // put Vx ; writes a single char from x to stdout              : 1x0A
 
     void skp(nibble x);             // skp x ; skip next instruction if key x is pressed           : 1x0B

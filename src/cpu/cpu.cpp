@@ -6,25 +6,19 @@
 
 #include <iostream>
 #include <algorithm>
-#include <random>
+#include <cstdlib>
 #include <vector>
 
 CPU::CPU(uint16_t * code_start, uint16_t * code_end, int load_to) :
 ram(4096)
 {
-    int offs = 0;
-    uint16_t * instr;
-    do
-    {
-        instr = (uint16_t *) this->ram.get(load_to+offs);
-        *instr = *(code_start+offs);
-        offs += 1;
-    } while (code_start+offs < code_end);
+    int offs = code_end - code_start;
+    memcpy(this->ram.get(load_to), code_start, offs);
 
     this->current_instruction = load_to;
     this->last_instruction = load_to+offs;
 
-    for (int i = 0; i < 16; i++) {this->registers[i] = 0;}
+    for (signed char & i : this->registers) {i = 0;}
 }
 
 std::vector<int> get_digits(int x)
@@ -230,7 +224,7 @@ int CPU::run()
     {
         auto real_instr = (uint16_t *) this->ram.get(this->current_instruction);
         this->instruct(real_instr);
-        this->current_instruction += 1;
+        this->current_instruction += 2;
     }
 }
 
@@ -238,8 +232,7 @@ int CPU::run()
 
 void CPU::pass()
 {
-
-};
+}
 
 void CPU::cls()
 {
@@ -249,55 +242,58 @@ void CPU::cls()
 void CPU::ret()
 {
     this->current_instruction = this->stack[this->stack_pointer];
-    this->stack_pointer--;
 }
 
 // all the minus 1 because we always increment the PC
 
 void CPU::jp(addr a)
 {
-    this->current_instruction = a._ - 1;
+    this->current_instruction = a._;
+    this->current_instruction -= 2;
+
 }
 
 void CPU::jp(nibble x)
 {
-    this->current_instruction = this->registers[x._] - 1;
+    this->current_instruction = this->registers[x._];
+    this->current_instruction -= 2;
 }
 
 void CPU::call(addr a)
 {
     this->stack_pointer++;
     this->stack[this->stack_pointer] = this->current_instruction;
-    this->current_instruction = a._ -1;
+    this->current_instruction = a._;
+    this->current_instruction -= 2;
 }
 
-void CPU::se(nibble x, byte a)
+void CPU::se(nibble x, byte b)
 {
-    if (this->registers[x._] == a)
-        this->current_instruction += 1;
+    if (this->registers[x._] == b)
+        this->current_instruction += 2;
 }
 
 void CPU::se(nibble x, nibble y)
 {
     if (this->registers[x._] == this->registers[y._])
-        this->current_instruction += 1;
+        this->current_instruction += 2;
 }
 
-void CPU::sne(nibble x, byte a)
+void CPU::sne(nibble x, byte b)
 {
-    if (this->registers[x._] != a)
-        this->current_instruction += 1;
+    if (this->registers[x._] != b)
+        this->current_instruction += 2;
 }
 
 void CPU::sne(nibble x, nibble y)
 {
     if (this->registers[x._] != this->registers[y._])
-        this->current_instruction += 1;
+        this->current_instruction += 2;
 }
 
-void CPU::mov(nibble x, byte a)
+void CPU::mov(nibble x, byte b)
 {
-    this->registers[x._] = a;
+    this->registers[x._] = b;
 }
 
 void CPU::mov(nibble x, nibble y)
@@ -309,6 +305,13 @@ void CPU::mov(nibble x)
 {
     this->I = this->registers[x._];
 }
+
+/*
+void CPU::mov(addr a)
+{
+    this->I = a._;
+}
+*/
 
 void CPU::mov_get_delay(nibble x)
 {

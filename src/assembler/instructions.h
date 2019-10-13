@@ -10,6 +10,7 @@
 
 std::vector<std::string> split(std::string string);
 
+void label(std::string line, int line_count);
 uint16_t jp(std::string line);
 uint16_t call(std::string line);
 uint16_t se(std::string line);

@@ -16,10 +16,10 @@ void * RAM::get(int addr)
 {
     if (addr > this->size)
         return NULL;
-    return (int *) this->at + addr;
+    return (char *)this->at + addr;
 }
 
 int RAM::resolve(void * addr)
 {
-    return (uintptr_t)this->at - (uintptr_t)addr;
+    return (int)((uintptr_t)this->at - (uintptr_t)addr);
 }

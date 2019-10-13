@@ -15,24 +15,56 @@ constexpr unsigned int hash(const char * s, int off = 0) {
     return !s[off] ? 5381 : hash(s, off+1)*33 ^ s[off];
 }
 
+bool endswith(std::string mainStr, std::string toFind)
+{
+    char * str = new char[mainStr.size() + 1];
+    std::copy(mainStr.begin(), mainStr.end(), str);
+    str[mainStr.size()] = '\0';
+
+    if(strlen(str) >= strlen(toFind.c_str()))
+    {
+        if(!strcmp(str + strlen(str) - strlen(toFind.c_str()), toFind.c_str()))
+        {
+            delete[] str;
+            return true;
+        }
+    }
+    delete[] str;
+    return false;
+}
+
 std::vector<uint16_t> process_file(std::string path)
 {
-    std::string line;
+    int lines = 0;
     std::vector<uint16_t> res;
 
     std::ifstream file(path);
+
+    std::vector<std::string> content;
     if (file.is_open())
     {
-        while (getline(file, line))
+        std::string buffer;
+        while (getline(file, buffer))
+        {
+            content.push_back(buffer);
+        }
+        file.close();
+
+        for (int i = 0; i < content.size(); i++)
+        {
+            if (endswith(content[i], ":"))
+            {
+                label(content[i], i);
+            }
+        }
+
+        for (auto const & line: content)
         {
             std::vector<std::string> tokens = split(line);
             uint16_t instruction;
 
             switch (hash(tokens[0].c_str()))
             {
-            case hash(""):
-                instruction = 0x0000;
-                break;
             case hash("cls"):
                 instruction = 0x00E0;
                 break;
@@ -84,10 +116,13 @@ std::vector<uint16_t> process_file(std::string path)
             case hash("sknp"):
                 instruction = sknp(line);
                 break;
+            default:
+                instruction = 0x0000;
+                break;
             }
+            lines++;
             res.push_back(instruction);
         }
-        file.close();
     } else return {};
     return res;
 }
